@@ -1,0 +1,20 @@
+{
+  "name": "Project_Node_TS",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/guiferrini/Project_Node_TS.git",
+  "author": "Guilherme Ferrini <guilhermemferrini@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "dev:server": "ts-node-dev --transpileOnly --ignore-watch node_modules src/server.ts"
+  },
+  "dependencies": {
+    "@types/express": "^4.17.6",
+    "express": "^4.17.1",
+    "typescript": "^3.8.3"
+  },
+  "devDependencies": {
+    "ts-node-dev": "^1.0.0-pre.44"
+  }
+}
