@@ -6,6 +6,12 @@ import AppointmentsRepository from '../repositories/AppointmentsRepository';
 const appointmentsRouter = Router();
 const appointmentsRepository = new AppointmentsRepository();
 
+appointmentsRouter.get('/', (request, response) => {
+  const appointment = appointmentsRepository.all();
+
+  return response.json(appointment);
+});
+
 appointmentsRouter.post('/', (request, response) => {
   // só coloco '/', pq já foi definida a rota e exportada
   const { provider, date } = request.body; // nome do barber e data(dia e hr)
