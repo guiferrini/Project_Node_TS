@@ -1,3 +1,4 @@
+// responsabilidade pelo formato dos dados
 import { uuid } from 'uuidv4';
 
 class Appointment {
