@@ -1,19 +1,20 @@
 import { Router } from 'express';
+import { getCustomRepository } from 'typeorm';
 import { parseISO } from 'date-fns'; // parseISO: trans o dado de string p data
 
 import AppointmentsRepository from '../repositories/AppointmentsRepository';
 import CreateAppointmentService from '../services/CreateAppointmentServices';
 
 const appointmentsRouter = Router();
-const appointmentsRepository = new AppointmentsRepository();
 
-appointmentsRouter.get('/', (request, response) => {
-  const appointment = appointmentsRepository.all();
+appointmentsRouter.get('/', async (request, response) => {
+  const appointmentsRepository = getCustomRepository(AppointmentsRepository);
+  const appointment = await appointmentsRepository.find();
 
   return response.json(appointment);
 });
 
-appointmentsRouter.post('/', (request, response) => {
+appointmentsRouter.post('/', async (request, response) => {
   // só coloco '/', pq já foi definida a rota e exportada
   try {
     const { provider, date } = request.body; // nome do barber e data(dia e hr)
@@ -21,11 +22,9 @@ appointmentsRouter.post('/', (request, response) => {
     // const parsedDate = startOfHour(parseISO(date)); // zera hora e transforma date em obj js
     const parsedDate = parseISO(date);
 
-    const createAppointment = new CreateAppointmentService(
-      appointmentsRepository,
-    );
+    const createAppointment = new CreateAppointmentService();
 
-    const appointment = createAppointment.execute({
+    const appointment = await createAppointment.execute({
       date: parsedDate,
       provider,
     });
