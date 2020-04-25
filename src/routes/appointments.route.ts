@@ -17,7 +17,7 @@ appointmentsRouter.get('/', async (request, response) => {
 appointmentsRouter.post('/', async (request, response) => {
   // só coloco '/', pq já foi definida a rota e exportada
   try {
-    const { provider, date } = request.body; // nome do barber e data(dia e hr)
+    const { provider_id, date } = request.body; // nome do barber e data(dia e hr)
 
     // const parsedDate = startOfHour(parseISO(date)); // zera hora e transforma date em obj js
     const parsedDate = parseISO(date);
@@ -26,7 +26,7 @@ appointmentsRouter.post('/', async (request, response) => {
 
     const appointment = await createAppointment.execute({
       date: parsedDate,
-      provider,
+      provider_id,
     });
 
     return response.json(appointment);
