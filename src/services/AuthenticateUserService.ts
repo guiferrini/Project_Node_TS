@@ -1,5 +1,6 @@
 import { getRepository } from 'typeorm';
 import { compare } from 'bcryptjs';
+import { sign } from 'jsonwebtoken'; // Assinar um tocken, criar um token
 
 import User from '../models/User';
 
@@ -10,6 +11,7 @@ interface Request {
 
 interface Response {
   user: User;
+  token: string;
 }
 
 class AuthenticateUserService {
@@ -31,10 +33,15 @@ class AuthenticateUserService {
       throw new Error('Incorrect email/password combination');
     }
 
-    // Usuario identificado
+    const token = sign({}, 'fb37c1d62bece0bb88c27584b183d8a3', {
+      // 1°Payload (fica dentro do token mas n seguro) 2°Chave secreta 3° configurações do token
+      subject: user.id,
+      expiresIn: '1d',
+    });
 
     return {
       user,
+      token,
     };
   }
 }
