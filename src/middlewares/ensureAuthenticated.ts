@@ -4,6 +4,12 @@ import { verify } from 'jsonwebtoken';
 
 import authConfig from '../config/auth';
 
+interface TokenPayload {
+  iat: number;
+  exp: number;
+  sub: string;
+}
+
 export default function ensureAuthenticated(
   request: Request,
   response: Response,
@@ -24,7 +30,12 @@ export default function ensureAuthenticated(
   try {
     const decoded = verify(token, authConfig.jwt.secret);
 
-    console.log(decoded);
+    const { sub } = decoded as TokenPayload; // forçando um tipo de variável, pq o sistem an sabe se é string ou objeto
+
+    // Request modificado em @types -> express.d.ts
+    request.user = {
+      id: sub,
+    };
 
     return next();
   } catch {
