@@ -1,4 +1,6 @@
 import { Router } from 'express';
+import multer from 'multer';
+import uploadConfig from '../config/upload';
 
 import CreateUserService from '../services/CreateUsersService';
 
@@ -6,6 +8,7 @@ import CreateUserService from '../services/CreateUsersService';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const usersRouter = Router();
+const upload = multer(uploadConfig); // upload é uma instancia do multer, tenho alguns métodos
 
 usersRouter.post('/', async (request, response) => {
   // só coloco '/', pq já foi definida a rota e exportada
@@ -29,8 +32,15 @@ usersRouter.post('/', async (request, response) => {
 });
 
 // patch altera uma unica info
-usersRouter.patch('/avatar', ensureAuthenticated, async (request, response) => {
-  return response.json({ ok: true });
-});
+usersRouter.patch(
+  '/avatar',
+  ensureAuthenticated, // miidleware
+  upload.single('avatar'), // miidleware
+  async (request, response) => {
+    console.log(request.file);
+
+    return response.json({ ok: true });
+  },
+);
 
 export default usersRouter;
