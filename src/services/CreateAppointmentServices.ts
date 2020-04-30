@@ -3,6 +3,8 @@
 import { startOfHour } from 'date-fns';
 import { getCustomRepository } from 'typeorm';
 
+import AppError from '../errors/AppErrors';
+
 import Appointment from '../models/Appointment';
 import AppointmentsRepository from '../repositories/AppointmentsRepository';
 
@@ -22,7 +24,7 @@ class CreateAppointmentService {
     );
 
     if (findAppointmentInSameDate) {
-      throw Error('This appointment is already booked'); // lança o erra a mensagem, é o 'return response'
+      throw new AppError('This appointment is already booked'); // lança o erra a mensagem, é o 'return response'
     }
 
     const appointment = appointmentsRepository.create({
