@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 
 import express, { Request, Response, NextFunction } from 'express';
+import cors from 'cors';
 import 'express-async-errors';
 
 import routes from './routes';
@@ -11,12 +12,13 @@ import './database'; // n tem q importar 'nd', pq ela n exporta 'nd'
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use('/file', express.static(uploadConfig.directory)); // rota com caminho fixo, q mostra a imagem
 app.use(routes);
 
 app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
-  // Middlewera p tratativa de erro tem 4 parametros; _ é next porm n vou utilizar
+  // Middlewera p tratativa de erro tem 4 parametros; _ é next porm n vou utiliz
   if (err instanceof AppError) {
     // se o erro for dentro da aplicação, seu conheço
     return response.status(err.statusCode).json({
