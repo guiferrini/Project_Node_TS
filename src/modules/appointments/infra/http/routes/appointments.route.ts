@@ -2,10 +2,10 @@ import { Router } from 'express';
 import { getCustomRepository } from 'typeorm';
 import { parseISO } from 'date-fns'; // parseISO: trans o dado de string p data
 
-import AppointmentsRepository from '../repositories/AppointmentsRepository';
-import CreateAppointmentService from '../services/CreateAppointmentServices';
+import CreateAppointmentService from '@modules/appointments/services/CreateAppointmentServices';
+import AppointmentsRepository from '@modules/appointments/repositories/AppointmentsRepository';
 
-import ensureAuthenticated from '../middlewares/ensureAuthenticated';
+import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthenticated';
 
 const appointmentsRouter = Router();
 

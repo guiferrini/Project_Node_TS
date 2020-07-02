@@ -1,11 +1,11 @@
 import { getRepository } from 'typeorm';
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken'; // Assinar um tocken, criar um token
-import authConfig from '../config/auth';
+import authConfig from '@config/auth';
 
-import AppError from '../errors/AppErrors';
+import AppError from '@shared/errors/AppErrors';
 
-import User from '../models/User';
+import User from '@modules/users/infra/typeorm/entities/User';
 
 interface Request {
   email: string;

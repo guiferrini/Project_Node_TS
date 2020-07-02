@@ -1,7 +1,7 @@
 // resposnabilidade da maneira q os dados são armazenados
 import { EntityRepository, Repository } from 'typeorm';
 
-import Appointment from '../models/Appointment';
+import Appointment from '../infra/typeorm/entities/Appointment';
 
 @EntityRepository(Appointment) // @Decorator(Parametro: model)
 class AppointmentsRepository extends Repository<Appointment> {
