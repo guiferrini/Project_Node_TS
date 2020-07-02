@@ -27,13 +27,10 @@ class CreateAppointmentService {
       throw new AppError('This appointment is already booked'); // lança o erra a mensagem, é o 'return response'
     }
 
-    const appointment = appointmentsRepository.create({
+    const appointment = await appointmentsRepository.create({
       provider_id,
       date: appointmentDate,
     });
-
-    // o create n salva no bd
-    await appointmentsRepository.save(appointment);
 
     return appointment;
   }
