@@ -8,8 +8,6 @@ import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthentica
 
 const appointmentsRouter = Router();
 
-const appointmentsRepository = new AppointmentsRepository();
-
 // tds as rotas necessitam da autenticação, aplica p tds!
 appointmentsRouter.use(ensureAuthenticated);
 
@@ -26,6 +24,7 @@ appointmentsRouter.post('/', async (request, response) => {
   // const parsedDate = startOfHour(parseISO(date)); // zera hora e transforma date em obj js
   const parsedDate = parseISO(date);
 
+  const appointmentsRepository = new AppointmentsRepository();
   const createAppointment = new CreateAppointmentService(
     appointmentsRepository,
   );

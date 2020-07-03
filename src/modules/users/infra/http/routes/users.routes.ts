@@ -2,6 +2,7 @@ import { Router } from 'express';
 import multer from 'multer';
 import uploadConfig from '@config/upload';
 
+import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepositories';
 import CreateUserService from '@modules/users/services/CreateUsersService';
 import UpdateUserAvatarService from '@modules/users/services/UpdateUserAvatarService';
 
@@ -15,7 +16,8 @@ usersRouter.post('/', async (request, response) => {
   // só coloco '/', pq já foi definida a rota e exportada
   const { name, email, password } = request.body;
 
-  const createUser = new CreateUserService();
+  const usersRepository = new UsersRepository();
+  const createUser = new CreateUserService(usersRepository);
 
   const user = await createUser.execute({
     name,
@@ -34,7 +36,8 @@ usersRouter.patch(
   ensureAuthenticated, // miidleware
   upload.single('avatar'), // miidleware
   async (request, response) => {
-    const updateUserAvatar = new UpdateUserAvatarService();
+    const usersRepository = new UsersRepository();
+    const updateUserAvatar = new UpdateUserAvatarService(usersRepository);
 
     const user = await updateUserAvatar.execute({
       user_id: request.user.id,
