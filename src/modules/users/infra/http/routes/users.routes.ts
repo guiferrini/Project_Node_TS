@@ -1,51 +1,26 @@
 import { Router } from 'express';
 import multer from 'multer';
 import uploadConfig from '@config/upload';
-import { container } from 'tsyringe';
 
-import CreateUserService from '@modules/users/services/CreateUsersService';
-import UpdateUserAvatarService from '@modules/users/services/UpdateUserAvatarService';
+import UsersController from '../controllers/UsersControllers';
+import UserAvatarController from '../controllers/UserAvatarController';
 
 // validar se usuaria está autenticado
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const usersRouter = Router();
 const upload = multer(uploadConfig); // upload é uma instancia do multer, tenho alguns métodos
+const usersController = new UsersController();
+const userAvatarController = new UserAvatarController();
 
-usersRouter.post('/', async (request, response) => {
-  // só coloco '/', pq já foi definida a rota e exportada
-  const { name, email, password } = request.body;
-
-  const createUser = container.resolve(CreateUserService);
-
-  const user = await createUser.execute({
-    name,
-    email,
-    password,
-  });
-
-  delete user.password;
-
-  return response.json(user);
-});
+usersRouter.post('/', usersController.create);
 
 // patch altera uma unica info
 usersRouter.patch(
   '/avatar',
   ensureAuthenticated, // miidleware
   upload.single('avatar'), // miidleware
-  async (request, response) => {
-    const updateUserAvatar = container.resolve(UpdateUserAvatarService);
-
-    const user = await updateUserAvatar.execute({
-      user_id: request.user.id,
-      avatarFilename: request.file.filename,
-    });
-
-    delete user.password;
-
-    return response.json(user);
-  },
+  userAvatarController.update,
 );
 
 export default usersRouter;
