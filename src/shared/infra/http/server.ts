@@ -9,7 +9,7 @@ import AppError from '@shared/errors/AppErrors';
 import routes from './routes';
 
 import '@shared/infra/database.typeorm'; // n tem q importar 'nd', pq ela n exporta 'nd'
-import '@shared/containes'; // importação injeção de dependencia
+import '@shared/container'; // importação injeção de dependencia
 
 const app = express();
 

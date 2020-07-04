@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import multer from 'multer';
 import uploadConfig from '@config/upload';
+import { container } from 'tsyringe';
 
-import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepositories';
 import CreateUserService from '@modules/users/services/CreateUsersService';
 import UpdateUserAvatarService from '@modules/users/services/UpdateUserAvatarService';
 
@@ -16,8 +16,7 @@ usersRouter.post('/', async (request, response) => {
   // só coloco '/', pq já foi definida a rota e exportada
   const { name, email, password } = request.body;
 
-  const usersRepository = new UsersRepository();
-  const createUser = new CreateUserService(usersRepository);
+  const createUser = container.resolve(CreateUserService);
 
   const user = await createUser.execute({
     name,
@@ -36,8 +35,7 @@ usersRouter.patch(
   ensureAuthenticated, // miidleware
   upload.single('avatar'), // miidleware
   async (request, response) => {
-    const usersRepository = new UsersRepository();
-    const updateUserAvatar = new UpdateUserAvatarService(usersRepository);
+    const updateUserAvatar = container.resolve(UpdateUserAvatarService);
 
     const user = await updateUserAvatar.execute({
       user_id: request.user.id,

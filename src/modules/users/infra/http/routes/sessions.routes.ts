@@ -1,8 +1,8 @@
 // Rota de autenticação
 import { Router } from 'express';
+import { container } from 'tsyringe';
 
 import AuthenticateUserService from '@modules/users/services/AuthenticateUserService';
-import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepositories';
 
 const sessionsRouter = Router();
 
@@ -10,8 +10,7 @@ sessionsRouter.post('/', async (request, response) => {
   // só coloco '/', pq já foi definida a rota e exportada
   const { email, password } = request.body;
 
-  const usersRepository = new UsersRepository();
-  const authenticateUser = new AuthenticateUserService(usersRepository);
+  const authenticateUser = container.resolve(AuthenticateUserService);
 
   const { user, token } = await authenticateUser.execute({
     email,
