@@ -5,7 +5,6 @@ import { uuid } from 'uuidv4';
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import ICreateAppointmentDTO from '@modules/appointments/dto/ICreateAppointmenDTO';
 
-import appointmentsRouter from '@modules/appointments/infra/http/routes/appointments.route';
 import Appointment from '../../infra/typeorm/entities/Appointment';
 
 class AppointmentsRepository implements IAppointmentsRepository {

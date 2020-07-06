@@ -1,5 +1,6 @@
 // Serviço responsável somente pela CRIAÇÃO de agendamentos
 // SERVICES nunca tem acesso direto aos dados da REQUISIÇÃO e a RESPOSTA, o resposável é ROTA
+import 'reflect-metadata';
 import { startOfHour } from 'date-fns';
 import { inject, injectable } from 'tsyringe';
 
