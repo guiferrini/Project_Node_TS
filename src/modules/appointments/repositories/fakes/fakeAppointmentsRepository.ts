@@ -1,14 +1,23 @@
 // Não pode ter nenhuma conexao com o typeorm
+// crio Array e utilizo só JS puro para salvar infos e fazer os testes
+// o 'fake' é um esplho do repository porem salvando em Array
 import { uuid } from 'uuidv4';
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import ICreateAppointmentDTO from '@modules/appointments/dto/ICreateAppointmenDTO';
 
+import appointmentsRouter from '@modules/appointments/infra/http/routes/appointments.route';
 import Appointment from '../../infra/typeorm/entities/Appointment';
 
 class AppointmentsRepository implements IAppointmentsRepository {
   private appointments: Appointment[] = [];
 
-  public async findByDate(date: Date): Promise<Appointment | undefined> {}
+  public async findByDate(date: Date): Promise<Appointment | undefined> {
+    const findAppointment = this.appointments.find(
+      appointment => appointment.date === date,
+    );
+
+    return findAppointment;
+  }
 
   public async create({
     provider_id,
