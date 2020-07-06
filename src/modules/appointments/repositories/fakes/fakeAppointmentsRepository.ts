@@ -2,6 +2,8 @@
 // crio Array e utilizo só JS puro para salvar infos e fazer os testes
 // o 'fake' é um esplho do repository porem salvando em Array
 import { uuid } from 'uuidv4';
+import { isEqual } from 'date-fns';
+
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import ICreateAppointmentDTO from '@modules/appointments/dto/ICreateAppointmenDTO';
 
@@ -11,8 +13,8 @@ class AppointmentsRepository implements IAppointmentsRepository {
   private appointments: Appointment[] = [];
 
   public async findByDate(date: Date): Promise<Appointment | undefined> {
-    const findAppointment = this.appointments.find(
-      appointment => appointment.date === date,
+    const findAppointment = this.appointments.find(appointment =>
+      isEqual(appointment.date, date),
     );
 
     return findAppointment;
