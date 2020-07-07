@@ -6,7 +6,7 @@ import UpdateUserAvatarService from './UpdateUserAvatarService';
 import FakeUsersRepository from '../repositories/fake/FakeUsersRepository';
 
 describe('UpdateUserAvatar', () => {
-  it('should be able to update avatar user', async () => {
+  it('should be able to create avatar user', async () => {
     const fakeUsersRepository = new FakeUsersRepository();
     const fakeStorageProvider = new FakeStorageProvider();
 
@@ -46,5 +46,38 @@ describe('UpdateUserAvatar', () => {
         avatarFilename: 'avatarTest.jpg',
       }),
     ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should be able to update avatar user - delete the older', async () => {
+    const fakeUsersRepository = new FakeUsersRepository();
+    const fakeStorageProvider = new FakeStorageProvider();
+
+    // spyOn - espiona/observa uma função - p saber se foi executada ou não
+    const deleteFile = jest.spyOn(fakeStorageProvider, 'deleteFile');
+
+    // Criou o service e passou o repository fake, salva as infos na memoria da aplicação
+    const updateUserAvatar = new UpdateUserAvatarService(
+      fakeUsersRepository,
+      fakeStorageProvider,
+    );
+
+    const user = await fakeUsersRepository.create({
+      name: 'gui',
+      email: 'gmf@teste.com',
+      password: '123456',
+    });
+
+    await updateUserAvatar.execute({
+      user_id: user.id,
+      avatarFilename: 'avatarTest.jpg',
+    });
+
+    await updateUserAvatar.execute({
+      user_id: user.id,
+      avatarFilename: 'avatarTest2.jpg',
+    });
+
+    expect(deleteFile).toHaveBeenCalledWith('avatarTest.jpg');
+    expect(user.avatar).toBe('avatarTest2.jpg');
   });
 });
