@@ -5,7 +5,8 @@ import multer from 'multer';
 const tmpFolder = path.resolve(__dirname, '..', '..', 'tmp'); // onde os arquivos vão ser de imagens armazenados, pasta tmp fora da raiz pq n tem codigo
 
 export default {
-  directory: tmpFolder,
+  tmpFolder,
+  uploadFolder: path.resolve(tmpFolder, 'uploads'),
 
   storage: multer.diskStorage({
     // dirmane ref ao diretorio q o arq está, tenho o caminho inteiro até a pasta config; depois vou adicionando ate a pasta tmp
