@@ -1,4 +1,3 @@
-import { compare } from 'bcryptjs';
 import 'reflect-metadata';
 import { sign } from 'jsonwebtoken'; // Assinar um tocken, criar um token
 import authConfig from '@config/auth';
@@ -6,6 +5,7 @@ import { inject, injectable } from 'tsyringe';
 
 import AppError from '@shared/errors/AppErrors';
 import IUsersRepository from '../repositories/IUsersRepositories';
+import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 
 import User from '../infra/typeorm/entities/User';
 
@@ -24,6 +24,9 @@ class AuthenticateUserService {
   constructor(
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
+
+    @inject('HashProvider')
+    private hashProvider: IHashProvider,
   ) {}
 
   public async execute({ email, password }: IRequest): Promise<IResponse> {
@@ -36,7 +39,10 @@ class AuthenticateUserService {
     // user.password - senha criptografada
     // password - é a senha q tentou fazer login, não criptografada
 
-    const passwordMatched = await compare(password, user.password);
+    const passwordMatched = await this.hashProvider.compareHash(
+      password,
+      user.password,
+    );
 
     if (!passwordMatched) {
       throw new AppError('Incorrect email/password combination', 401);
