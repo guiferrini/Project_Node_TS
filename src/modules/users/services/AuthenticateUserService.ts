@@ -1,4 +1,5 @@
 import { compare } from 'bcryptjs';
+import 'reflect-metadata';
 import { sign } from 'jsonwebtoken'; // Assinar um tocken, criar um token
 import authConfig from '@config/auth';
 import { inject, injectable } from 'tsyringe';
