@@ -1,7 +1,5 @@
-import path from 'path';
+import 'reflect-metadata';
 import { inject, injectable } from 'tsyringe';
-import fs from 'fs';
-import uploadConfig from '@config/upload';
 
 import AppError from '@shared/errors/AppErrors';
 import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
