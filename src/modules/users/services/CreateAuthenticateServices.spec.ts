@@ -56,4 +56,34 @@ describe('AuthenticateUser', () => {
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
+
+  it('should not be able to authenticate with wrong password', async () => {
+    const fakeUsersRepository = new FakeUsersRepository();
+    const fakeHashProvider = new FakeHashProvider();
+
+    // Criou o service e passou o repository fake, salva as infos na memoria da aplicação
+    const createUser = new CreateUsersServices(
+      fakeUsersRepository,
+      fakeHashProvider,
+    );
+
+    const authenticateUser = new AuthenticateUserServices(
+      fakeUsersRepository,
+      fakeHashProvider,
+    );
+
+    // 1° cio User e depois Authentico
+    await createUser.execute({
+      name: 'gui',
+      email: 'gmf@gmail.com',
+      password: '123456',
+    });
+
+    expect(
+      authenticateUser.execute({
+        email: 'gmf@gmail.com',
+        password: 'wrong-passrod',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
 });
