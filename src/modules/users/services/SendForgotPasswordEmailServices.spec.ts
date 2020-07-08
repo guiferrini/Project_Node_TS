@@ -1,6 +1,6 @@
 // test() = it()
 // teste unitario, cria o fake repository - n utiliza o BD 'real'
-// import AppError from '@shared/errors/AppErrors';
+import AppError from '@shared/errors/AppErrors';
 import FakeMailProvider from '@shared/container/providers/MailProvider/fakes/FakeMailProvider';
 import CreateUserServices from './CreateUsersService';
 
@@ -31,5 +31,22 @@ describe('SendForgotPasswordEmail', () => {
     });
 
     expect(sendMail).toHaveBeenCalled();
+  });
+
+  it('should not be able to a not existing user password', async () => {
+    const fakeUsersRepository = new FakeUsersRepository();
+    const fakeMailProvider = new FakeMailProvider();
+
+    // Criou o service e passou o repository fake, salva as infos na memoria da aplicação
+    const sendForgotPasswordEmail = new SendForgotPasswordEmail(
+      fakeUsersRepository,
+      fakeMailProvider,
+    );
+
+    await expect(
+      sendForgotPasswordEmail.execute({
+        email: 'gmf@gmail.com',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
   });
 });

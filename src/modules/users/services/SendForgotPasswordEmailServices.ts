@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { inject, injectable } from 'tsyringe';
 
-// import AppError from '@shared/errors/AppErrors';
+import AppError from '@shared/errors/AppErrors';
 // import User from '@modules/users/infra/typeorm/entities/User';
 import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
 import IUsersRepository from '../repositories/IUsersRepositories';
@@ -21,6 +21,12 @@ class SendForgotPasswordRmailServices {
   ) {}
 
   public async execute({ email }: IRequest): Promise<void> {
+    const checkUserExists = await this.usersRepository.findByEmail(email);
+
+    if (!checkUserExists) {
+      throw new AppError('User does not exist');
+    }
+
     this.mailProvider.sendMail(
       email,
       'Pedirod de recuperação de email recebbido',
