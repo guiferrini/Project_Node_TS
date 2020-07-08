@@ -2,7 +2,7 @@
 // teste unitario, cria o fake repository - n utiliza o BD 'real'
 import AppError from '@shared/errors/AppErrors';
 import FakeMailProvider from '@shared/container/providers/MailProvider/fakes/FakeMailProvider';
-import CreateUserServices from './CreateUsersService';
+// import CreateUserServices from './CreateUsersService';
 
 import FakeUsersRepository from '../repositories/fake/FakeUsersRepository';
 import SendForgotPasswordEmail from './SendForgotPasswordEmailServices';
