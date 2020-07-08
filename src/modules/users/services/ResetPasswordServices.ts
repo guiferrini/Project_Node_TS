@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { inject, injectable } from 'tsyringe';
 
-// import AppError from '@shared/errors/AppErrors';
+import AppError from '@shared/errors/AppErrors';
 // import User from '@modules/users/infra/typeorm/entities/User';
 import IUsersRepository from '../repositories/IUsersRepositories';
 import IUserTokensRepository from '../repositories/IUserTokensRepository';
@@ -21,6 +21,22 @@ class ResetPasswordService {
     private userTokensRepository: IUserTokensRepository,
   ) {}
 
-  public async execute({ token, password }: IRequest): Promise<void> {}
+  public async execute({ token, password }: IRequest): Promise<void> {
+    const userToken = await this.userTokensRepository.findByToken(token);
+
+    if (!userToken) {
+      throw new AppError('User token does not exists');
+    }
+
+    const user = await this.usersRepository.findById(userToken.user_id);
+
+    if (!user) {
+      throw new AppError('User does not exists');
+    }
+
+    user.password = password;
+
+    await this.usersRepository.save(user);
+  }
 }
 export default ResetPasswordService;
