@@ -12,6 +12,7 @@ describe('SendForgotPasswordEmail', () => {
   it('should be able to recover the passaword using his email', async () => {
     const fakeUsersRepository = new FakeUsersRepository();
     const fakeMailProvider = new FakeMailProvider();
+    const fakeUserTokensRepository = new FakeUserTokensRepository();
 
     const sendMail = jest.spyOn(fakeMailProvider, 'sendMail');
 
@@ -19,6 +20,7 @@ describe('SendForgotPasswordEmail', () => {
     const sendForgotPasswordEmail = new SendForgotPasswordEmail(
       fakeUsersRepository,
       fakeMailProvider,
+      fakeUserTokensRepository,
     );
 
     await fakeUsersRepository.create({
@@ -37,11 +39,13 @@ describe('SendForgotPasswordEmail', () => {
   it('should not be able to a not existing user password', async () => {
     const fakeUsersRepository = new FakeUsersRepository();
     const fakeMailProvider = new FakeMailProvider();
+    const fakeUserTokensRepository = new FakeUserTokensRepository();
 
     // Criou o service e passou o repository fake, salva as infos na memoria da aplicação
     const sendForgotPasswordEmail = new SendForgotPasswordEmail(
       fakeUsersRepository,
       fakeMailProvider,
+      fakeUserTokensRepository,
     );
 
     await expect(
@@ -62,6 +66,7 @@ describe('SendForgotPasswordEmail', () => {
     const sendForgotPasswordEmail = new SendForgotPasswordEmail(
       fakeUsersRepository,
       fakeMailProvider,
+      fakeUserTokenRepository,
     );
 
     const user = await fakeUsersRepository.create({

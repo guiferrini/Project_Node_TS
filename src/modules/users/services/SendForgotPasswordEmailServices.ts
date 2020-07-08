@@ -5,6 +5,7 @@ import AppError from '@shared/errors/AppErrors';
 // import User from '@modules/users/infra/typeorm/entities/User';
 import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
 import IUsersRepository from '../repositories/IUsersRepositories';
+import IUserTokensRepository from '../repositories/IUserTokensRepository';
 
 interface IRequest {
   email: string;
@@ -18,6 +19,9 @@ class SendForgotPasswordRmailServices {
 
     @inject('MailProvider')
     private mailProvider: IMailProvider,
+
+    @inject('UserTokensRepository')
+    private userTokensRepository: IUserTokensRepository,
   ) {}
 
   public async execute({ email }: IRequest): Promise<void> {
@@ -26,6 +30,8 @@ class SendForgotPasswordRmailServices {
     if (!checkUserExists) {
       throw new AppError('User does not exist');
     }
+
+    await this.userTokensRepository.generate(checkUserExists.id);
 
     this.mailProvider.sendMail(
       email,

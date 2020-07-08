@@ -9,6 +9,9 @@ import AppointmetsRepositoy from '@modules/appointments/infra/typeorm/repositori
 import IUsersRepository from '@modules/users/repositories/IUsersRepositories';
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepositories';
 
+// import IUserTokensRepository from '@modules/users/repositories/IUserTokensRepository';
+// import UserTokensRepository from '@modules/users/infra/typeorm/repositories/UsersRepositories';
+
 container.registerSingleton<IAppointmetsRepository>( // a Tipagem garante q 2° parametro esteja no formato correto
   'AppointmetsRepositoy', // id/nome (eu escolho)
   AppointmetsRepositoy, // repositorio q vai usar na injeção
