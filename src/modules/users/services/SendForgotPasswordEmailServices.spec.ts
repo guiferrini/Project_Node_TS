@@ -5,6 +5,7 @@ import FakeMailProvider from '@shared/container/providers/MailProvider/fakes/Fak
 // import CreateUserServices from './CreateUsersService';
 
 import FakeUsersRepository from '../repositories/fake/FakeUsersRepository';
+import FakeUserTokensRepository from '../repositories/fake/FakeUserTokensRepository';
 import SendForgotPasswordEmail from './SendForgotPasswordEmailServices';
 
 describe('SendForgotPasswordEmail', () => {
@@ -48,5 +49,31 @@ describe('SendForgotPasswordEmail', () => {
         email: 'gmf@gmail.com',
       }),
     ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should generate a forgot password token', async () => {
+    const fakeUsersRepository = new FakeUsersRepository();
+    const fakeMailProvider = new FakeMailProvider();
+    const fakeUserTokenRepository = new FakeUserTokensRepository();
+
+    const generateToken = jest.spyOn(fakeUserTokenRepository, 'generate');
+
+    // Criou o service e passou o repository fake, salva as infos na memoria da aplicação
+    const sendForgotPasswordEmail = new SendForgotPasswordEmail(
+      fakeUsersRepository,
+      fakeMailProvider,
+    );
+
+    const user = await fakeUsersRepository.create({
+      name: 'gui',
+      email: 'gmf@gmail.com',
+      password: '123456',
+    });
+
+    await sendForgotPasswordEmail.execute({
+      email: 'gmf@gmail.com',
+    });
+
+    expect(generateToken).toHaveBeenCalledWith(user.id);
   });
 });

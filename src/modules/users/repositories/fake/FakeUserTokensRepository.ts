@@ -10,7 +10,7 @@ import UserToken from '../../infra/typeorm/entities/UserToken';
 class FakeUserTokensRepository implements IUserTokensRepository {
   private userTokens: UserToken[] = [];
 
-  public async generete(user_id: string): Promise<UserToken> {
+  public async generate(user_id: string): Promise<UserToken> {
     const userToken = new UserToken();
 
     Object.assign(userToken, {
