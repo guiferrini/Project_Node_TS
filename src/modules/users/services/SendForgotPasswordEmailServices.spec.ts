@@ -17,6 +17,7 @@ describe('SendForgotPasswordEmail', () => {
     // Criou o service e passou o repository fake, salva as infos na memoria da aplicação
     const sendForgotPasswordEmail = new SendForgotPasswordEmail(
       fakeUsersRepository,
+      fakeMailProvider,
     );
 
     await fakeUsersRepository.create({
