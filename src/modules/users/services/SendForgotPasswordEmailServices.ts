@@ -31,11 +31,13 @@ class SendForgotPasswordRmailServices {
       throw new AppError('User does not exist');
     }
 
-    await this.userTokensRepository.generate(checkUserExists.id);
+    const { token } = await this.userTokensRepository.generate(
+      checkUserExists.id,
+    );
 
-    this.mailProvider.sendMail(
+    await this.mailProvider.sendMail(
       email,
-      'Pedirod de recuperação de email recebbido',
+      `Pedirod de recuperação de email recebbido ${token}`,
     );
   }
 }

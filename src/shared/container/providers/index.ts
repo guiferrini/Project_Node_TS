@@ -11,7 +11,7 @@ container.registerSingleton<IStorageProvider>(
   DiskStorageProvider, // hj estatico, no futuro um caminho p desenvolvimento outro p produção
 );
 
-container.registerSingleton<IMailProvider>(
+container.registerInstance<IMailProvider>(
   'MailProvider',
-  EtherealMailProvider, // hj estatico, no futuro um caminho p desenvolvimento outro p produção
+  new EtherealMailProvider(), // hj estatico, no futuro um caminho p desenvolvimento outro p produção
 );
