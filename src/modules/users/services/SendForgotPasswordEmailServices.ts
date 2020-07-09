@@ -35,10 +35,20 @@ class SendForgotPasswordRmailServices {
       checkUserExists.id,
     );
 
-    await this.mailProvider.sendMail(
-      email,
-      `Pedirod de recuperação de email recebbido ${token}`,
-    );
+    await this.mailProvider.sendMail({
+      to: {
+        name: checkUserExists.name,
+        email: checkUserExists.email,
+      },
+      subject: '[GoBarber] Recuperação de Senha',
+      templateData: {
+        template: 'Olá, {{name}}: {{token}}',
+        variables: {
+          name: checkUserExists.name,
+          token,
+        },
+      },
+    });
   }
 }
 
