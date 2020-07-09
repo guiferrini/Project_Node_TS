@@ -8,14 +8,14 @@ import uploadConfig from '@config/upload';
 import AppError from '@shared/errors/AppErrors';
 import routes from './routes';
 
-import '@shared/infra/database.typeorm'; // n tem q importar 'nd', pq ela n exporta 'nd'
+import '@shared/infra/typeorm'; // n tem q importar 'nd', pq ela n exporta 'nd'
 import '@shared/container'; // importação injeção de dependencia
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use('/file', express.static(uploadConfig.directory)); // rota com caminho fixo, q mostra a imagem
+app.use('/file', express.static(uploadConfig.uploadFolder)); // rota com caminho fixo, q mostra a imagem
 app.use(routes);
 
 app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
