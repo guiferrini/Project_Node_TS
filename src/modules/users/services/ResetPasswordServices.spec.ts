@@ -4,20 +4,24 @@
 
 import FakeUsersRepository from '../repositories/fake/FakeUsersRepository';
 import FakeUserTokensRepository from '../repositories/fake/FakeUserTokensRepository';
+import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 import ResetPasswordServices from './ResetPasswordServices';
 
 let fakeUsersRepository: FakeUsersRepository;
 let fakeUserTokensRepository: FakeUserTokensRepository;
 let resetPassword: ResetPasswordServices;
+let fakeHashProvider: FakeHashProvider;
 
 describe('ResetPasswordServices', () => {
   beforeEach(() => {
     fakeUsersRepository = new FakeUsersRepository();
     fakeUserTokensRepository = new FakeUserTokensRepository();
+    fakeHashProvider = new FakeHashProvider();
 
     resetPassword = new ResetPasswordServices(
       fakeUsersRepository,
       fakeUserTokensRepository,
+      fakeHashProvider,
     );
   });
 
@@ -31,6 +35,8 @@ describe('ResetPasswordServices', () => {
 
     const { token } = await fakeUserTokensRepository.generate(user.id);
 
+    const generateHash = jest.spyOn(fakeHashProvider, 'generateHash');
+
     await resetPassword.execute({
       password: '123123',
       token,
@@ -38,6 +44,7 @@ describe('ResetPasswordServices', () => {
 
     const updateUser = await fakeUsersRepository.findById(user.id);
 
+    expect(generateHash).toHaveBeenCalledWith('123123');
     expect(updateUser?.password).toBe('123123');
   });
 });
