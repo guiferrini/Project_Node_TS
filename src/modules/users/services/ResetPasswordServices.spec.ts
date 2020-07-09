@@ -1,6 +1,6 @@
 // test() = it()
 // teste unitario, cria o fake repository - n utiliza o BD 'real'
-// import AppError from '@shared/errors/AppErrors';
+import AppError from '@shared/errors/AppErrors';
 
 import FakeUsersRepository from '../repositories/fake/FakeUsersRepository';
 import FakeUserTokensRepository from '../repositories/fake/FakeUserTokensRepository';
@@ -46,5 +46,14 @@ describe('ResetPasswordServices', () => {
 
     expect(generateHash).toHaveBeenCalledWith('123123');
     expect(updateUser?.password).toBe('123123');
+  });
+
+  it('Should not be able to reset the password with non-existing token', async () => {
+    await expect(
+      resetPassword.execute({
+        token: 'non-extist',
+        password: '123456',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
   });
 });
