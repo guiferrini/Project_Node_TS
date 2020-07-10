@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import { inject, injectable } from 'tsyringe';
+import path from 'path';
 
 import AppError from '@shared/errors/AppErrors';
 // import User from '@modules/users/infra/typeorm/entities/User';
@@ -35,6 +36,13 @@ class SendForgotPasswordRmailServices {
       checkUserExists.id,
     );
 
+    const forgotPasswordTemplate = path.resolve(
+      __dirname,
+      '..',
+      'views',
+      'forgot_password.hbs',
+    );
+
     await this.mailProvider.sendMail({
       to: {
         name: checkUserExists.name,
@@ -42,7 +50,7 @@ class SendForgotPasswordRmailServices {
       },
       subject: '[GoBarber] Recuperação de Senha',
       templateData: {
-        template: 'Olá, {{name}}: {{token}}',
+        file: forgotPasswordTemplate,
         variables: {
           name: checkUserExists.name,
           token,
