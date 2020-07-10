@@ -1,6 +1,6 @@
 // test() = it()
 // teste unitario, cria o fake repository - n utiliza o BD 'real'
-// import AppError from '@shared/errors/AppErrors';
+import AppError from '@shared/errors/AppErrors';
 
 import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 import FakeUsersRepository from '../repositories/fake/FakeUsersRepository';
@@ -12,8 +12,9 @@ let updateProfile: UpdateProfileService;
 
 describe('UpdateProfile', () => {
   beforeEach(() => {
-    fakeHashProvider = new FakeHashProvider();
     fakeUsersRepository = new FakeUsersRepository();
+    fakeHashProvider = new FakeHashProvider();
+
     updateProfile = new UpdateProfileService(
       fakeUsersRepository,
       fakeHashProvider,
@@ -34,5 +35,28 @@ describe('UpdateProfile', () => {
     });
 
     expect(updateUser.name).toBe('gui alterado');
+    expect(updateUser.email).toBe('alterado@test.com.br');
+  });
+
+  it('should not be able to change email to another user email', async () => {
+    await fakeUsersRepository.create({
+      name: 'gui',
+      email: 'gmf@teste.com',
+      password: '123456',
+    });
+
+    const user = await fakeUsersRepository.create({
+      name: 'su',
+      email: 'su@teste.com',
+      password: '123456',
+    });
+
+    await expect(
+      updateProfile.execute({
+        user_id: user.id,
+        name: 'su',
+        email: 'gmf@teste.com',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
   });
 });

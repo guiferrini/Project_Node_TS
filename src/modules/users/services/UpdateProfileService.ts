@@ -11,8 +11,8 @@ interface IRequest {
   user_id: string;
   name: string;
   email: string;
-  old_password: string;
-  password: string;
+  old_password?: string;
+  password?: string;
 }
 
 @injectable()
@@ -26,10 +26,19 @@ class UpdateProfile {
   ) {}
 
   public async execute({ user_id, name, email }: IRequest): Promise<User> {
+    // verificando se usuario existe
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User not found');
+      throw new AppError('User not found.');
+    }
+
+    // verificando se e-mail já esta sendo utilizdo por outro usuario (userForUpdatedEmail) e
+    // se o proprio usuario não quer alterar o email cadastrado, não dar erro
+    const userForUpdatedEmail = await this.usersRepository.findByEmail(email);
+
+    if (userForUpdatedEmail && userForUpdatedEmail.id !== user_id) {
+      throw new AppError('Email already in use.');
     }
 
     user.name = name;
