@@ -11,8 +11,8 @@ interface IRequest {
   user_id: string;
   name: string;
   email: string;
-  // old_password: string;
-  // password: string;
+  old_password: string;
+  password: string;
 }
 
 @injectable()
@@ -32,7 +32,10 @@ class UpdateProfile {
       throw new AppError('User not found');
     }
 
-    return user;
+    user.name = name;
+    user.email = email;
+
+    return this.usersRepository.save(user);
   }
 }
 
