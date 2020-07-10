@@ -6,7 +6,7 @@ import authConfig from '@config/auth';
 
 import AppError from '@shared/errors/AppErrors';
 
-interface TokenPayload {
+interface ITokenPayload {
   iat: number;
   exp: number;
   sub: string;
@@ -32,7 +32,7 @@ export default function ensureAuthenticated(
   try {
     const decoded = verify(token, authConfig.jwt.secret);
 
-    const { sub } = decoded as TokenPayload; // forçando um tipo de variável, pq o sistem an sabe se é string ou objeto
+    const { sub } = decoded as ITokenPayload; // forçando um tipo de variável, pq o sistem an sabe se é string ou objeto
 
     // Request modificado em @types -> express.d.ts
     request.user = {
