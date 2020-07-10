@@ -1,18 +1,18 @@
 import 'reflect-metadata';
 import { inject, injectable } from 'tsyringe';
 
-// import AppError from '@shared/errors/AppErrors';
+import AppError from '@shared/errors/AppErrors';
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 import IUsersRepository from '../repositories/IUsersRepositories';
 
-// import User from '../infra/typeorm/entities/User';
+import User from '../infra/typeorm/entities/User';
 
 interface IRequest {
   user_id: string;
   name: string;
   email: string;
-  old_password: string;
-  password: string;
+  // old_password: string;
+  // password: string;
 }
 
 @injectable()
@@ -25,7 +25,15 @@ class UpdateProfile {
     private hashProvider: IHashProvider,
   ) {}
 
-  public async execute({ user_id, name, email }: IRequest): Promise<void> {}
+  public async execute({ user_id, name, email }: IRequest): Promise<User> {
+    const user = await this.usersRepository.findById(user_id);
+
+    if (!user) {
+      throw new AppError('User not found');
+    }
+
+    return user;
+  }
 }
 
 export default UpdateProfile;
