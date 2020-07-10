@@ -77,4 +77,21 @@ describe('UpdateProfile', () => {
 
     expect(updateUser.password).toBe('123123');
   });
+
+  it('should not be able to Update the Password without old password', async () => {
+    const user = await fakeUsersRepository.create({
+      name: 'gui',
+      email: 'gmf@teste.com',
+      password: '123456',
+    });
+
+    await expect(
+      updateProfile.execute({
+        user_id: user.id,
+        name: 'gui alterado',
+        email: 'alterado@test.com.br',
+        password: '123123',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
 });
