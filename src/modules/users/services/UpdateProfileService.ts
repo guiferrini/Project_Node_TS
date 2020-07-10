@@ -33,7 +33,7 @@ class UpdateProfile {
     old_password,
   }: IRequest): Promise<User> {
     // verificando se usuario existe
-    const user = await this.usersRepository.findById(user_id);
+    const user = await this.usersRepository.findById(user_id); // ojeto inteiro do user q esta sendo atualizado
 
     if (!user) {
       throw new AppError('User not found.');
@@ -54,7 +54,17 @@ class UpdateProfile {
       throw new AppError('Old Password is required to set New Password');
     }
 
-    if (password) {
+    if (password && old_password) {
+      // comparando se senha antiga é igual a informada pelo usuario
+      const checkOldPassword = await this.hashProvider.compareHash(
+        old_password,
+        user.password,
+      );
+
+      if (!checkOldPassword) {
+        throw new AppError('Old Password is wrong');
+      }
+
       user.password = await this.hashProvider.generateHash(password);
     }
 
