@@ -53,7 +53,7 @@ class SendForgotPasswordRmailServices {
         file: forgotPasswordTemplate,
         variables: {
           name: checkUserExists.name,
-          token,
+          link: `http://localhost:3000/reset_password?token=${token}`,
         },
       },
     });
