@@ -12,6 +12,7 @@ const profileController = new ProfileController();
 // td user logado tem acesso ao user_id
 profileRouter.use(ensureAuthenticated);
 
+profileRouter.get('/', profileController.show);
 profileRouter.put('/', profileController.update);
 
 export default profileRouter;
