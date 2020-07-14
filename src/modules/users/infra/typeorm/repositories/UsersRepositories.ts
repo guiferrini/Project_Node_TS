@@ -1,7 +1,7 @@
 // Repositorios de Appointments especifico p o typeorm, se trocar BD, altera aqui
 
 // resposnabilidade da maneira q os dados são armazenados
-import { getRepository, Repository } from 'typeorm';
+import { getRepository, Repository, Not } from 'typeorm';
 
 import IUsersRepository from '@modules/users/repositories/IUsersRepositories';
 import ICreateUserDTO from '@modules/users/dtos/ICreateUsersDTO';
@@ -13,6 +13,19 @@ class UsersRepository implements IUsersRepository {
 
   constructor() {
     this.ormRepository = getRepository(User); // Cria o repositorio de User
+  }
+
+  public async findAllProviders(except_user_id?: string): Promise<User[]> {
+    let users: User[];
+
+    if (except_user_id) {
+      users = await this.ormRepository.find({
+        where: Not(except_user_id),
+      });
+    } else {
+      users = await this.ormRepository.find();
+    }
+    return users;
   }
 
   public async findById(id: string): Promise<User | undefined> {
