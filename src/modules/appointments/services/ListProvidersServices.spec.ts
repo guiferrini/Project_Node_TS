@@ -1,6 +1,6 @@
 // test() = it()
 // teste unitario, cria o fake repository - n utiliza o BD 'real'
-import AppError from '@shared/errors/AppErrors';
+// import AppError from '@shared/errors/AppErrors';
 
 import FakeUsersRepository from '@modules/users/repositories/fake/FakeUsersRepository';
 import ListProvidersService from './ListProvidersServices';

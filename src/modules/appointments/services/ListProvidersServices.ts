@@ -18,7 +18,9 @@ class ListProvidersService {
 
   public async execute({ user_id }: IRequest): Promise<User[]> {
     // verificando se usuario existe
-    const users = await this.usersRepository.findAllProviders(user_id); // metodo: retorna tds menos quem está usando a aplicação
+    const users = await this.usersRepository.findAllProviders({
+      except_user_id: user_id,
+    }); // metodo: retorna tds menos quem está usando a aplicação
 
     return users;
   }
