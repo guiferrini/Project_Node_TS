@@ -1,10 +1,12 @@
 // Repositorios de Appointments especifico p o typeorm, se trocar BD, altera aqui
 
 // resposnabilidade da maneira q os dados são armazenados
-import { getRepository, Repository } from 'typeorm';
+import { getRepository, Repository, Raw } from 'typeorm';
 
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import ICreateAppointmentDTO from '@modules/appointments/dto/ICreateAppointmenDTO';
+import IFindAllMonthFromProviderDTO from '@modules/appointments/dto/IFindAllMonthFromProviderDTO';
+
 
 import Appointment from '../entities/Appointment';
 
@@ -21,6 +23,25 @@ class AppointmentsRepository implements IAppointmentsRepository {
     });
 
     return findAppointment;
+  }
+
+  public async findAllMonthFromProvider({
+    provider_id,
+    month,
+    year }: IFindAllMonthFromProviderDTO): Promise<Appointment[]> {
+      const parseMonth = String(month).padStart(2, '0'); //se começa com 1, transforma em 01
+
+      const appointments = await this.ormRepository.find({
+        where: {
+          provider_id,
+          date: Raw(
+            dateFilename =>
+              `to_char(${dateFilename}, 'MM-YYYY') = '${parseMonth}-${year}'`,
+          ),
+        },
+      });
+
+    return appointments;
   }
 
   public async create({
