@@ -2,11 +2,12 @@
 // crio Array e utilizo só JS puro para salvar infos e fazer os testes
 // o 'fake' é um esplho do repository porem salvando em Array
 import { uuid } from 'uuidv4';
-import { isEqual, getMonth, getYear } from 'date-fns';
+import { isEqual, getMonth, getYear, getDate } from 'date-fns';
 
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import ICreateAppointmentDTO from '@modules/appointments/dto/ICreateAppointmenDTO';
 import IFindAllMonthFromProviderDTO from '@modules/appointments/dto/IFindAllMonthFromProviderDTO';
+import IFindAllDayFromProviderDTO from '@modules/appointments/dto/IFindAllDayFromProviderDTO';
 
 import Appointment from '../../infra/typeorm/entities/Appointment';
 
@@ -28,6 +29,23 @@ class AppointmentsRepository implements IAppointmentsRepository {
     const appointments = this.appointments.filter(appointment => {
       return (
         appointment.provider_id ===  provider_id &&
+        getMonth(appointment.date) + 1 === month && // começa do zero
+        getYear(appointment.date) === year
+      );
+    });
+
+    return appointments;
+  }
+
+  public async findAllDayFromProvider({
+    provider_id,
+    month,
+    day,
+    year }: IFindAllDayFromProviderDTO): Promise<Appointment[]> {
+    const appointments = this.appointments.filter(appointment => {
+      return (
+        appointment.provider_id ===  provider_id &&
+        getDate(appointment.date) === day &&
         getMonth(appointment.date) + 1 === month && // começa do zero
         getYear(appointment.date) === year
       );
