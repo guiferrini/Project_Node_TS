@@ -19,17 +19,52 @@ describe('ListProviderMonthAvaibility', () => {
     // criando agendamentos
     await fakeAppointmentsRepository.create({
       provider_id: "user",
-      date: new Date(2020, 3, 20, 8, 0, 0),
-    })
-
-    await fakeAppointmentsRepository.create({
-      provider_id: "user",
       date: new Date(2020, 4, 20, 8, 0, 0),
     })
 
     await fakeAppointmentsRepository.create({
       provider_id: "user",
+      date: new Date(2020, 4, 20, 9, 0, 0),
+    })
+
+    await fakeAppointmentsRepository.create({
+      provider_id: "user",
       date: new Date(2020, 4, 20, 10, 0, 0),
+    })
+
+    await fakeAppointmentsRepository.create({
+      provider_id: "user",
+      date: new Date(2020, 4, 20, 11, 0, 0),
+    })
+
+    await fakeAppointmentsRepository.create({
+      provider_id: "user",
+      date: new Date(2020, 4, 20, 12, 0, 0),
+    })
+
+    await fakeAppointmentsRepository.create({
+      provider_id: "user",
+      date: new Date(2020, 4, 20, 13, 0, 0),
+    })
+
+    await fakeAppointmentsRepository.create({
+      provider_id: "user",
+      date: new Date(2020, 4, 20, 14, 0, 0),
+    })
+
+    await fakeAppointmentsRepository.create({
+      provider_id: "user",
+      date: new Date(2020, 4, 20, 15, 0, 0),
+    })
+
+    await fakeAppointmentsRepository.create({
+      provider_id: "user",
+      date: new Date(2020, 4, 20, 16, 0, 0),
+    })
+
+    await fakeAppointmentsRepository.create({
+      provider_id: "user",
+      date: new Date(2020, 4, 20, 17, 0, 0),
     })
 
     await fakeAppointmentsRepository.create({
@@ -45,10 +80,10 @@ describe('ListProviderMonthAvaibility', () => {
     })
 
     expect(availability).toEqual(expect.arrayContaining([
-      { day: 19, avaibility: true },
-      { day: 20, avaibility: false },
-      { day: 21, avaibility: false },
-      { day: 22, avaibility: true },
+      { day: 19, availabla: true },
+      { day: 20, availabla: false },
+      { day: 21, availabla: true },
+      { day: 22, availabla: true },
       ]),
     );
   });
